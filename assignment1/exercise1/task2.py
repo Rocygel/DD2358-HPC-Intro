@@ -50,11 +50,11 @@ def calc_pure_python(desired_width, max_iterations):
 
     print("Length of x:", len(x))
     print("Total elements:", len(zs))
-    start_time = timer()
+    #start_time = timer()
     output = calculate_z_serial_purepython(max_iterations, zs, cs)
-    end_time = timer()
-    secs = end_time - start_time
-    print(calculate_z_serial_purepython.__name__ + " took", secs, "seconds")
+    #end_time = timer()
+    #secs = end_time - start_time
+    #print(calculate_z_serial_purepython.__name__ + " took", secs, "seconds")
 
     # This sum is expected for a 1000^2 grid with 300 iterations
     # It ensures that our code evolves exactly as we'd intended
@@ -83,4 +83,4 @@ if __name__ == "__main__":
     calc_pure_python(desired_width=1000, max_iterations=300) 
     end = timer()
     secs = end - start
-    print(calc_pure_python.__name__ + "took", secs, "seconds")
+    #print(calc_pure_python.__name__ + "took", secs, "seconds")
