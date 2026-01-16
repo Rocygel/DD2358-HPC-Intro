@@ -30,6 +30,3 @@ for i in range(n):
 check_tick = check_tick / n
 
 print(checktick())
-
-# 1.2
-
