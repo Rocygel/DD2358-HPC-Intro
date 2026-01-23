@@ -1,0 +1,60 @@
+Length of x: 1000
+Total elements: 1000000
+@timefn: calculate_z_serial_purepython took 7.007974147796631 seconds
+@timefn: calc_pure_python took 7.333960056304932 seconds
+calc_pure_pythontook 7.3340089321136475 seconds
+
+Length of x: 1000
+Total elements: 1000000
+@timefn: calculate_z_serial_purepython took 6.962741851806641 seconds
+@timefn: calc_pure_python took 7.310176372528076 seconds
+calc_pure_pythontook 7.310245752334595 seconds
+
+Length of x: 1000
+Total elements: 1000000
+@timefn: calculate_z_serial_purepython took 7.07690167427063 seconds
+@timefn: calc_pure_python took 7.403398752212524 seconds
+calc_pure_pythontook 7.403447866439819 seconds
+
+Length of x: 1000
+Total elements: 1000000
+@timefn: calculate_z_serial_purepython took 7.075807332992554 seconds
+@timefn: calc_pure_python took 7.404618263244629 seconds
+calc_pure_pythontook 7.404666423797607 seconds
+
+Length of x: 1000
+Total elements: 1000000
+@timefn: calculate_z_serial_purepython took 6.940352439880371 seconds
+@timefn: calc_pure_python took 7.265768051147461 seconds
+calc_pure_pythontook 7.265830039978027 seconds
+
+Length of x: 1000
+Total elements: 1000000
+@timefn: calculate_z_serial_purepython took 7.142070293426514 seconds
+@timefn: calc_pure_python took 7.469719409942627 seconds
+calc_pure_pythontook 7.469768762588501 seconds
+
+Length of x: 1000
+Total elements: 1000000
+@timefn: calculate_z_serial_purepython took 6.913681745529175 seconds
+@timefn: calc_pure_python took 7.241347312927246 seconds
+calc_pure_pythontook 7.2414000034332275 seconds
+
+Length of x: 1000
+Total elements: 1000000
+@timefn: calculate_z_serial_purepython took 6.983898639678955 seconds
+@timefn: calc_pure_python took 7.308879852294922 seconds
+calc_pure_pythontook 7.308926105499268 seconds
+
+Length of x: 1000
+Total elements: 1000000
+@timefn: calculate_z_serial_purepython took 7.038495779037476 seconds
+@timefn: calc_pure_python took 7.365543842315674 seconds
+calc_pure_pythontook 7.3655922412872314 seconds
+
+Length of x: 1000
+Total elements: 1000000
+@timefn: calculate_z_serial_purepython took 7.020121097564697 seconds
+@timefn: calc_pure_python took 7.346592664718628 seconds
+calc_pure_pythontook 7.3466408252716064 seconds
+
