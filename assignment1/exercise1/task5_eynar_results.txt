@@ -1,0 +1,43 @@
+  if iscoroutinefunction(func):
+Filename: task5.py
+
+Line #    Mem usage    Increment  Occurrences   Line Contents
+=============================================================
+     3   82.594 MiB  788.984 MiB          10   @profile
+     4                                         def evolve(grid, dt, D=1.0):
+     5   82.594 MiB    0.000 MiB          10       xmax, ymax = grid_shape
+     6   82.594 MiB    3.207 MiB        6410       new_grid = [[0.0] * ymax for x in range(xmax)]
+     7   90.469 MiB -29470.648 MiB        6410       for i in range(xmax):
+     8   90.469 MiB -18914700.742 MiB     4102400           for j in range(ymax):
+     9   90.469 MiB -18885155.289 MiB     4096000               grid_xx = (
+    10   90.469 MiB -18885130.184 MiB     4096000                   grid[(i + 1) % xmax][j] + grid[(i - 1) % xmax][j] - 2.0 * grid[i][j]
+    11                                                     )
+    12   90.469 MiB -18885155.289 MiB     4096000               grid_yy = (
+    13   90.469 MiB -18885155.289 MiB     4096000                   grid[i][(j + 1) % ymax] + grid[i][(j - 1) % ymax] - 2.0 * grid[i][j]
+    14                                                     )
+    15   90.469 MiB -18885155.289 MiB     4096000               new_grid[i][j] = grid[i][j] + D * (grid_xx + grid_yy) * dt
+    16   90.469 MiB    0.000 MiB          10       return new_grid
+
+
+Filename: task5.py
+
+Line #    Mem usage    Increment  Occurrences   Line Contents
+=============================================================
+    18   59.004 MiB   59.004 MiB           1   @profile
+    19                                         def run_experiment(num_iterations):
+    20                                             # Setting up initial conditions 
+    21   59.004 MiB    0.000 MiB           1       xmax, ymax = grid_shape
+    22   62.160 MiB    3.156 MiB         641       grid = [[0.0] * ymax for x in range(xmax)]
+    23                                         
+    24                                             # These initial conditions are simulating a drop of dye in the middle of our
+    25                                             # simulated region
+    26   62.160 MiB    0.000 MiB           1       block_low = int(grid_shape[0] * 0.4)
+    27   62.160 MiB    0.000 MiB           1       block_high = int(grid_shape[0] * 0.5)
+    28   62.160 MiB    0.000 MiB          65       for i in range(block_low, block_high):
+    29   62.160 MiB    0.000 MiB        4160           for j in range(block_low, block_high):
+    30   62.160 MiB    0.000 MiB        4096               grid[i][j] = 0.005
+    31                                         
+    32                                             # Evolve the initial conditions
+    33   83.578 MiB    0.000 MiB          11       for i in range(num_iterations):
+    34   83.578 MiB  810.398 MiB          10           grid = evolve(grid, 0.1)
+

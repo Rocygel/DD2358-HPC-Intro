@@ -1,0 +1,68 @@
+Length of x: 1000
+Total elements: 1000000
+@timefn: calculate_z_serial_purepython took 7571.348806619644 seconds
+@timefn: calc_pure_python took 7794.519882678986 seconds
+Filename: task3.py
+
+Line #    Mem usage    Increment  Occurrences   Line Contents
+=============================================================
+    24   59.180 MiB   59.180 MiB           1   @timefn
+    25                                         @profile
+    26                                         def calc_pure_python(desired_width, max_iterations):
+    27                                             """Create a list of complex coordinates (zs) and complex parameters (cs),
+    28                                             build Julia set"""
+    29   59.180 MiB    0.000 MiB           1       x_step = (x2 - x1) / desired_width
+    30   59.180 MiB    0.000 MiB           1       y_step = (y1 - y2) / desired_width
+    31   59.180 MiB    0.000 MiB           1       x = []
+    32   59.180 MiB    0.000 MiB           1       y = []
+    33   59.180 MiB    0.000 MiB           1       ycoord = y2
+    34   59.219 MiB    0.000 MiB        1001       while ycoord > y1:
+    35   59.219 MiB    0.004 MiB        1000           y.append(ycoord)
+    36   59.219 MiB    0.035 MiB        1000           ycoord += y_step
+    37   59.219 MiB    0.000 MiB           1       xcoord = x1
+    38   59.254 MiB    0.000 MiB        1001       while xcoord < x2:
+    39   59.254 MiB    0.000 MiB        1000           x.append(xcoord)
+    40   59.254 MiB    0.035 MiB        1000           xcoord += x_step
+    41                                             # build a list of coordinates and the initial condition for each cell.
+    42                                             # Note that our initial condition is a constant and could easily be removed,
+    43                                             # we use it to simulate a real-world scenario with several inputs to our
+    44                                             # function
+    45   59.254 MiB    0.000 MiB           1       zs = []
+    46   59.254 MiB    0.000 MiB           1       cs = []
+    47  135.871 MiB   -6.488 MiB        1001       for ycoord in y:
+    48  135.871 MiB -6614.758 MiB     1001000           for xcoord in x:
+    49  135.871 MiB -6601.398 MiB     1000000               zs.append(complex(xcoord, ycoord))
+    50  135.871 MiB -6540.141 MiB     1000000               cs.append(complex(c_real, c_imag))
+    51                                         
+    52  135.871 MiB    0.000 MiB           1       print("Length of x:", len(x))
+    53  135.871 MiB    0.000 MiB           1       print("Total elements:", len(zs))
+    54                                             #start_time = timer()
+    55  146.578 MiB  146.578 MiB           1       output = calculate_z_serial_purepython(max_iterations, zs, cs)
+    56                                             #end_time = timer()
+    57                                             #secs = end_time - start_time
+    58                                             #print(calculate_z_serial_purepython.__name__ + " took", secs, "seconds")
+    59                                         
+    60                                             # This sum is expected for a 1000^2 grid with 300 iterations
+    61                                             # It ensures that our code evolves exactly as we'd intended
+    62  146.578 MiB    0.000 MiB           1       assert sum(output) == 33219980
+
+
+Filename: task3.py
+
+Line #    Mem usage    Increment  Occurrences   Line Contents
+=============================================================
+    64  135.871 MiB  135.871 MiB           1   @timefn
+    65                                         @profile
+    66                                         def calculate_z_serial_purepython(maxiter, zs, cs):
+    67                                             """Calculate output list using Julia update rule"""
+    68  143.504 MiB    7.633 MiB           1       output = [0] * len(zs)
+    69  146.578 MiB    0.000 MiB     1000001       for i in range(len(zs)):
+    70  146.578 MiB    0.000 MiB     1000000           n = 0
+    71  146.578 MiB    0.000 MiB     1000000           z = zs[i]
+    72  146.578 MiB    0.004 MiB     1000000           c = cs[i]
+    73  146.578 MiB    0.000 MiB    34219980           while abs(z) < 2 and n < maxiter:
+    74  146.578 MiB    3.070 MiB    33219980               z = z * z + c
+    75  146.578 MiB    0.000 MiB    33219980               n += 1
+    76  146.578 MiB    0.000 MiB     1000000           output[i] = n
+    77  146.578 MiB    0.000 MiB           1       return output
+
