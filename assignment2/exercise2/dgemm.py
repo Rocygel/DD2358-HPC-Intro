@@ -1,44 +1,83 @@
+import array as arr
 import numpy as np
 import pytest
 
 
-def dgemm(array_a, array_b, array_c):
-    for i in range(len(array_a)):
-        for j in range(len(array_b)):
-            for k in range(len(array_c)):
-                array_c[i,j] += array_a[i,k] * array_b[k,j]
-    return array_c
+# dgemm with list
+def dgemm_list(a, b, c):
+    for i in range(len(a)):
+        for j in range(len(b)):
+            for k in range(len(c)):
+                c[i][j] += a[i][k] * b[k][j]
+    return c
+
+
+# helper function returning 2D matrix indexing [i, j] for 1D array
+def array_index(a, b, n):
+    return a * n + b
+
+# dgemm with array
+def dgemm_array(a, b, c):
+    n = 4
+    for i in range(n):
+        for j in range(n):
+            for k in range(n):
+                c[array_index(i, j, n)] += a[array_index(i, k, n)] * b[array_index(k, j, n)]
+    return c
+
+
+# dgemm with numpy(?) unsure if this is intended data structure
+def dgemm_numpy(a, b, c):
+    for i in range(len(a)):
+        for j in range(len(b)):
+            for k in range(len(c)):
+                c[i,j] += a[i,k] * b[k,j]
+    return c
 
 
 @pytest.fixture
-def generate_set_data():
-    # a traditional unit test
+def generate_set_data_list():
+    # very elementary unit test
+    a = [[3, 1, 3, 2], [2, 6, 1, 7], [1, 2, 1, 5], [4, 8, 2, 1]]
+    b = [[2, 0, 9, 1], [9, 4, 8, 3], [8, 6, 5, 0], [9, 7, 5, 2]]
+    c = [[1, 3, 5, 4], [3, 2, 8, 1], [4, 7, 5, 6], [8, 5, 2, 0]]
+    expected = [[58, 39, 65, 14], [132, 81, 114, 35], [77, 56, 60, 23], [113, 56, 117, 30]]
+    return a, b, c, expected
+
+
+@pytest.fixture
+def generate_set_data_array():
+    # very elementary unit test
+    a = arr.array('i', [3, 1, 3, 2, 2, 6, 1, 7, 1, 2, 1, 5, 4, 8, 2, 1])
+    b = arr.array('i', [2, 0, 9, 1, 9, 4, 8, 3, 8, 6, 5, 0, 9, 7, 5, 2])
+    c = arr.array('i', [1, 3, 5, 4, 3, 2, 8, 1, 4, 7, 5, 6, 8, 5, 2, 0])
+    expected = arr.array('i', [58, 39, 65, 14, 132, 81, 114, 35, 77, 56, 60, 23, 113, 56, 117, 30])
+    return a, b, c, expected
+
+
+@pytest.fixture
+def generate_set_data_numpy():
+    # very elementary unit test
     a = np.array([[3, 1, 3, 2], [2, 6, 1, 7], [1, 2, 1, 5], [4, 8, 2, 1]])
     b = np.array([[2, 0, 9, 1], [9, 4, 8, 3], [8, 6, 5, 0], [9, 7, 5, 2]])
     c = np.array([[1, 3, 5, 4], [3, 2, 8, 1], [4, 7, 5, 6], [8, 5, 2, 0]])
-    return a, b, c
+    expected = np.array([[58, 39, 65, 14], [132, 81, 114, 35], [77, 56, 60, 23], [113, 56, 117, 30]])
+    return a, b, c, expected
 
 
-@pytest.fixture
-def generate_random_data():
-    # generate random matrix, maybe we catch unwanted error
-    rng = np.random.default_rng()
-    SIZE = 4
-    a = rng.random((SIZE, SIZE))
-    b = rng.random((SIZE, SIZE))
-    c = rng.random((SIZE, SIZE))
-    return a, b, c
-
-
-def test_set_dgemm(generate_set_data):
-    a, b, c = generate_set_data
-    expected = np.matmul(a, b) + c
-    actual = dgemm(a, b, c)
+def test_set_dgemm_list(generate_set_data_list):
+    a, b, c, expected = generate_set_data_list
+    actual = dgemm_list(a, b, c)
     assert np.allclose(actual, expected)
 
 
-def test_random_dgemm(generate_random_data):
-    a, b, c = generate_random_data
-    expected = np.matmul(a, b) + c
-    actual = dgemm(a, b, c)
+def test_set_dgemm_array(generate_set_data_array):
+    a, b, c, expected = generate_set_data_array
+    actual = dgemm_array(a, b, c)
+    assert np.allclose(actual, expected)
+
+
+def test_set_dgemm_numpy(generate_set_data_numpy):
+    a, b, c, expected = generate_set_data_numpy
+    actual = dgemm_numpy(a, b, c)
     assert np.allclose(actual, expected)
