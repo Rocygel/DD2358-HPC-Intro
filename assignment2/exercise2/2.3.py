@@ -31,7 +31,7 @@ def timefn(fn):
     return measure_time
 
 
-# dgemm with 
+# dgemm with list
 @timefn
 def dgemm_list(a, b, c):
     for i in range(len(a)):
@@ -53,9 +53,19 @@ def dgemm_array(a, b, c, n):
     return c
 
 
+# dgemm with numpy(?) unsure if this is intended data structure
 @timefn
-# dgemm with numpy
 def dgemm_numpy(a, b, c):
+    for i in range(len(a)):
+        for j in range(len(b)):
+            for k in range(len(c)):
+                c[i,j] += a[i,k] * b[k,j]
+    return c
+
+
+# for 2.5
+@timefn
+def dgemm_matmul(a, b, c):
     return (a @ b) + c
 
 
@@ -65,7 +75,7 @@ def dgemm_numpy(a, b, c):
 ### large datasets to be found online.
 
 if __name__ == "__main__":
-    SIZES = [50, 100, 200, 400, 800]
+    SIZES = [50, 100, 200] # included 400 800 for matmul in 2.5
     
     for size in SIZES:
         print(f"size {size} x {size}")
@@ -92,3 +102,7 @@ if __name__ == "__main__":
 
         #print(f" ------ numpy -------")
         dgemm_numpy(a_np, b_np, c_np.copy())
+
+        # for 2.5
+        #print(f"------ for 2.5 --------")
+        #dgemm_matmul(a_np, b_np, c_np.copy())

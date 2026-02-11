@@ -28,9 +28,14 @@ def dgemm_array(a, b, c, n):
     return c
 
 
-# dgemm with numpy
+# dgemm with numpy(?) unsure if this is intended data structure
 def dgemm_numpy(a, b, c):
-    return (a @ b) + c
+    for i in range(len(a)):
+        for j in range(len(b)):
+            for k in range(len(c)):
+                c[i,j] += a[i,k] * b[k,j]
+    return c
+
 
 ### tests for 2.2
 @pytest.fixture
