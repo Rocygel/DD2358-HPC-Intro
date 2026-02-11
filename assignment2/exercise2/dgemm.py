@@ -3,7 +3,8 @@ import numpy as np
 import pytest
 
 
-# dgemm with list
+### 2.1
+# dgemm with 
 def dgemm_list(a, b, c):
     for i in range(len(a)):
         for j in range(len(b)):
@@ -17,24 +18,21 @@ def array_index(a, b, n):
     return a * n + b
 
 # dgemm with array
-def dgemm_array(a, b, c):
-    n = 4
+def dgemm_array(a, b, c, n):
     for i in range(n):
+        i_n = i*n
         for j in range(n):
+            c_index = i_n + j
             for k in range(n):
-                c[array_index(i, j, n)] += a[array_index(i, k, n)] * b[array_index(k, j, n)]
+                c[c_index] += a[i_n + k] * b[k * n + j]
     return c
 
 
-# dgemm with numpy(?) unsure if this is intended data structure
+# dgemm with numpy
 def dgemm_numpy(a, b, c):
-    for i in range(len(a)):
-        for j in range(len(b)):
-            for k in range(len(c)):
-                c[i,j] += a[i,k] * b[k,j]
-    return c
+    return (a @ b) + c
 
-
+### tests for 2.2
 @pytest.fixture
 def generate_set_data_list():
     # very elementary unit test
@@ -73,7 +71,7 @@ def test_set_dgemm_list(generate_set_data_list):
 
 def test_set_dgemm_array(generate_set_data_array):
     a, b, c, expected = generate_set_data_array
-    actual = dgemm_array(a, b, c)
+    actual = dgemm_array(a, b, c, 4)
     assert np.allclose(actual, expected)
 
 
