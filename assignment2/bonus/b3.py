@@ -65,6 +65,7 @@ def add_gosper_glider_gun(i, j, grid):
     grid[i : i + 11, j : j + 38] = gun
 
 
+@profile
 def update(grid, n):
     """Update a matrix cell accoring to Conway's rules."""
     # copy grid since we require 8 neighbors for calculation
@@ -119,47 +120,27 @@ def main():
     parser.add_argument("--gosper", action="store_true", required=False)
     args = parser.parse_args()
 
-    SIZES = [5, 10, 20, 40, 80, 160]      # set grid size
+    size = 40      # set grid size
     iterations = 50
-    runs = 10                             # fixed iterations
-    total_time = [0 for _ in range(len(SIZES))]       # instantiate times for all runs
-    iteration_time = [0 for _ in range(iterations)]
 
-    for i in range(len(SIZES)):
-        size = SIZES[i]
-        for j in range(iterations):
-            t1 = timer()
+    # declare grid
+    grid = np.array([])
+    # check if "glider" demo flag is specified
+    if args.glider:
+        grid = np.zeros(size * size).reshape(size, size)
+        add_glider(1, 1, grid)
+    elif args.gosper:
+        grid = np.zeros(size * size).reshape(size, size)
+        add_gosper_glider_gun(10, 10, grid)
+    else:
+        # populate grid with random on/off - more off than on
+        grid = random_grid(size)
 
-            # declare grid
-            grid = np.array([])
-            # check if "glider" demo flag is specified
-            if args.glider:
-                grid = np.zeros(size * size).reshape(size, size)
-                add_glider(1, 1, grid)
-            elif args.gosper:
-                grid = np.zeros(size * size).reshape(size, size)
-                add_gosper_glider_gun(10, 10, grid)
-            else:
-                # populate grid with random on/off - more off than on
-                grid = random_grid(size)
+    # update without animation
+    for k in range(iterations):
+        grid = update(grid, size)
 
-            # update without animation
-            for k in range(iterations):
-                grid = update(grid, size)
-
-            t2 = timer()
-            iteration_time[j] = t2 - t1
-
-        total_time[i] = sum(iteration_time) / runs
-
-    print(total_time)
-
-    plt.plot(SIZES, total_time)
-    plt.scatter(SIZES, total_time)
-    plt.title(f"Execution time for varying grid sizes with {iterations} iterations (mean average of {runs} runs)")
-    plt.xlabel("Grid lengths (N for N x N grid)")
-    plt.ylabel("Computation time (s)")
-    plt.show()
+    exit()
 
 # call main
 if __name__ == "__main__":

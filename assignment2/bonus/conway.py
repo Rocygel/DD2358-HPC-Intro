@@ -65,7 +65,7 @@ def add_gosper_glider_gun(i, j, grid):
     grid[i : i + 11, j : j + 38] = gun
 
 
-def update(frame_data, img, grid, n):
+def update(grid, n):
     """Update a matrix cell accoring to Conway's rules."""
     # copy grid since we require 8 neighbors for calculation
     # and we go line by line
@@ -96,9 +96,9 @@ def update(frame_data, img, grid, n):
                 if total == 3:
                     new_grid[i, j] = ON
     # update data
-    img.set_data(new_grid)
+    #img.set_data(new_grid)
     grid[:] = new_grid[:]
-    return img
+    return new_grid
 
 
 # main() function
@@ -119,8 +119,9 @@ def main():
     parser.add_argument("--gosper", action="store_true", required=False)
     args = parser.parse_args()
 
-    SIZES = [50, 100, 200, 400, 800, 1600, 3200]      # set grid size
-    iterations = 50                             # fixed iterations
+    SIZES = [10, 20, 40, 80]      # set grid size
+    TOTAL_STEPS = 50
+    iterations = 10                             # fixed iterations
     total_time = [0 for _ in range(len(SIZES))]       # instantiate times for all runs
     iteration_time = [0 for _ in range(iterations)]
 
@@ -148,6 +149,10 @@ def main():
             else:
                 # populate grid with random on/off - more off than on
                 grid = random_grid(size)
+
+            # update without animation
+            for k in range(TOTAL_STEPS):
+                grid = update(grid, size)
 
             t2 = timer()
             iteration_time[j] = t2 - t1
@@ -183,7 +188,6 @@ def main():
     plt.xlabel("Grid lengths (N for N x N grid)")
     plt.ylabel("Computation time (s)")
     plt.show()
-
 
 # call main
 if __name__ == "__main__":
