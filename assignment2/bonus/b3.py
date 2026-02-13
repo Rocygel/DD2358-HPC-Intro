@@ -99,7 +99,7 @@ def update(grid, n):
     # update data
     #img.set_data(new_grid)
     grid[:] = new_grid[:]
-    return new_grid
+    return grid
 
 
 # main() function
