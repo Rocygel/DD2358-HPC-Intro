@@ -128,13 +128,6 @@ def main():
         size = SIZES[i]
         for j in range(iterations):
             t1 = timer()
-            #if args.n and int(args.n) > 8:
-            #    n = int(args.n)
-
-            # set animation update interval
-            #update_interval = 50
-            #if args.interval:
-            #    update_interval = int(args.interval)
 
             # declare grid
             grid = np.array([])
@@ -152,38 +145,15 @@ def main():
             t2 = timer()
             iteration_time[j] = t2 - t1
             
-
-            # set up animation
-            #fig, ax = plt.subplots()
-            #img = ax.imshow(grid, interpolation="nearest")
-            #ani = animation.FuncAnimation(
-            #    fig,
-            #    update,
-            #    fargs=(
-            #        img,
-            #        grid,
-            #        n,
-            #    ),
-            #    frames=10,
-            #    interval=update_interval,
-            #    save_count=50,
-            #)
-
-            # # of frames?
-            # set output file
-            #if args.movfile:
-            #    ani.save(args.movfile, fps=30, extra_args=["-vcodec", "libx264"])
-
-            #plt.show()
         total_time[i] = sum(iteration_time) / iterations
 
+    print(total_time)
     plt.plot(SIZES, total_time)
     plt.scatter(SIZES, total_time)
     plt.title("Execution time for varying grid sizes (mean average of 50 iterations)")
     plt.xlabel("Grid lengths (N for N x N grid)")
     plt.ylabel("Computation time (s)")
     plt.show()
-
 
 # call main
 if __name__ == "__main__":
