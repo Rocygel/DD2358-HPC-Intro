@@ -4,8 +4,9 @@ import pytest
 
 
 ### 2.1
-# dgemm with 
+# dgemm with list
 def dgemm_list(a, b, c):
+    """DGEMM implementation using list data structure"""
     for i in range(len(a)):
         for j in range(len(b)):
             for k in range(len(c)):
@@ -19,6 +20,7 @@ def array_index(a, b, n):
 
 # dgemm with array
 def dgemm_array(a, b, c, n):
+    """DGEMM implementation using array data structure"""
     for i in range(n):
         i_n = i*n
         for j in range(n):
@@ -30,6 +32,7 @@ def dgemm_array(a, b, c, n):
 
 # dgemm with numpy(?) unsure if this is intended data structure
 def dgemm_numpy(a, b, c):
+    """DGEMM implementation using np.array data structure"""
     for i in range(len(a)):
         for j in range(len(b)):
             for k in range(len(c)):

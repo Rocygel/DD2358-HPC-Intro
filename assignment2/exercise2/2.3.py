@@ -34,6 +34,7 @@ def timefn(fn):
 # dgemm with list
 @timefn
 def dgemm_list(a, b, c):
+    """DGEMM implementation using list data structure"""
     for i in range(len(a)):
         for j in range(len(b)):
             for k in range(len(c)):
@@ -44,6 +45,7 @@ def dgemm_list(a, b, c):
 @timefn
 # dgemm with array
 def dgemm_array(a, b, c, n):
+    """DGEMM implementation using array data structure"""
     for i in range(n):
         i_n = i*n
         for j in range(n):
@@ -56,6 +58,7 @@ def dgemm_array(a, b, c, n):
 # dgemm with numpy(?) unsure if this is intended data structure
 @timefn
 def dgemm_numpy(a, b, c):
+    """DGEMM implementation using np.array data structure"""
     for i in range(len(a)):
         for j in range(len(b)):
             for k in range(len(c)):
@@ -66,6 +69,7 @@ def dgemm_numpy(a, b, c):
 # for 2.5
 @timefn
 def dgemm_matmul(a, b, c):
+    """DGEMM implementation using np.array data structure with np.matmul"""
     return (a @ b) + c
 
 
@@ -86,23 +90,23 @@ if __name__ == "__main__":
         b_np = rng.random((size, size))
         c_np = rng.random((size, size))
         
-        #a_list = a_np.tolist()
-        #b_list = b_np.tolist()
-        #c_list = c_np.tolist()
+        a_list = a_np.tolist()
+        b_list = b_np.tolist()
+        c_list = c_np.tolist()
         
-        #a_arr = arr.array('d', a_np.flatten())
-        #b_arr = arr.array('d', b_np.flatten())
-        #c_arr = arr.array('d', c_np.flatten())
+        a_arr = arr.array('d', a_np.flatten())
+        b_arr = arr.array('d', b_np.flatten())
+        c_arr = arr.array('d', c_np.flatten())
 
-        #print(f" ----- list --------")
-        #dgemm_list(a_list, b_list, c_list)
+        print(f" ----- list --------")
+        dgemm_list(a_list, b_list, c_list)
 
-        #print(f" ------- array -------")
-        #dgemm_array(a_arr, b_arr, c_arr, size)
+        print(f" ------- array -------")
+        dgemm_array(a_arr, b_arr, c_arr, size)
 
-        #print(f" ------ numpy -------")
+        print(f" ------ numpy -------")
         dgemm_numpy(a_np, b_np, c_np.copy())
 
         # for 2.5
-        #print(f"------ for 2.5 --------")
-        #dgemm_matmul(a_np, b_np, c_np.copy())
+        print(f"------ for 2.5 --------")
+        dgemm_matmul(a_np, b_np, c_np.copy())
