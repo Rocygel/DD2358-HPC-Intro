@@ -6,6 +6,7 @@ A simple Python/matplotlib implementation of Conway's Game of Life.
 Author: Mahesh Venkitachalam
 """
 
+from timeit import default_timer as timer
 import argparse
 import numpy as np
 import matplotlib.pyplot as plt
@@ -20,7 +21,7 @@ def random_grid(n):
     """
     returns a grid of n*n random values
 
-    :param n: size of the return grid 
+    :param n: size of the return grid
     :type n: int
     :return: square matrix with n^2 cells
     :rtype: NumPy array
@@ -64,7 +65,27 @@ def add_gosper_glider_gun(i, j, grid):
     grid[i : i + 11, j : j + 38] = gun
 
 
-def update(frame_data, img, grid, n):
+@profile
+def update_vectorized(grid, n):
+    """Update function but with vectorization for improved performance.
+       Heavily based on the labri solution linked in assignment."""
+    # pad with wrap to handle torodial boundaries 
+    padded = np.pad(grid, pad_width = 1, mode='wrap')
+
+    new_grid = np.zeros(grid.shape, dtype=int)
+    new_grid[0: ,0: ] += (padded[ :-2, :-2] + padded[ :-2,1:-1] + padded[ :-2,2:] +
+                          padded[1:-1, :-2]                     + padded[1:-1,2:] +
+                          padded[2:  , :-2] + padded[2: ,1:-1]  + padded[2:  ,2:]) // 255
+
+    birth = (new_grid==3)[0: ,0: ] & (grid[0: , 0:, ]==0)
+    survive = ((new_grid==2) | (new_grid==3)[0: , 0: ]) & (grid[0: , 0: ] == 1)
+    grid[:] = 0
+    grid[0: ,0: ][birth | survive] = 1
+
+    #grid = new_grid
+    return grid
+
+def update(grid, n):
     """Update a matrix cell accoring to Conway's rules."""
     # copy grid since we require 8 neighbors for calculation
     # and we go line by line
@@ -74,6 +95,8 @@ def update(frame_data, img, grid, n):
             # compute 8-neghbor sum
             # using toroidal boundary conditions - x and y wrap around
             # so that the simulaton takes place on a toroidal surface.
+
+            # vectorization: calculate all values in vector then vector operate all at once
             total = int(
                 (
                     grid[i, (j - 1) % n]
@@ -95,31 +118,13 @@ def update(frame_data, img, grid, n):
                 if total == 3:
                     new_grid[i, j] = ON
     # update data
-    img.set_data(new_grid)
+    #img.set_data(new_grid)
     grid[:] = new_grid[:]
-    return img
+    return grid
 
-
-def update_vectorized(frame_data, img, grid, n):
-    """Update function but with vectorization for improved performance.
-       Heavily based on the labri solution linked in assignment."""
-    # pad with wrap to handle torodial boundaries 
-    padded = np.pad(grid, pad_width = 1, mode='wrap')
-
-    new_grid = np.zeros(grid.shape, dtype=int)
-    new_grid[0: ,0: ] += (padded[ :-2, :-2] + padded[ :-2,1:-1] + padded[ :-2,2:] +
-                          padded[1:-1, :-2]                     + padded[1:-1,2:] +
-                          padded[2:  , :-2] + padded[2: ,1:-1]  + padded[2:  ,2:]) // 255
-
-    birth = (new_grid==3)[0: ,0: ] & (grid[0: , 0:, ]==0)
-    survive = ((new_grid==2) | (new_grid==3))[0: , 0: ] & (grid[0: , 0: ] == 255)
-    grid[:] = 0
-    grid[0: ,0: ][birth | survive] = 255
-
-    img.set_data(grid)
-    return img
 
 # main() function
+# we commented out visualization and animation for performance measurement and analysis
 def main():
     """Main function."""
     # Command line args are in sys.argv[1], sys.argv[2] ..
@@ -136,52 +141,27 @@ def main():
     parser.add_argument("--gosper", action="store_true", required=False)
     args = parser.parse_args()
 
-    # set grid size
-    n = 100
-    if args.n and int(args.n) > 8:
-        n = int(args.n)
-
-    # set animation update interval
-    update_interval = 50
-    if args.interval:
-        update_interval = int(args.interval)
+    size = 40      # set grid size
+    iterations = 50
 
     # declare grid
     grid = np.array([])
     # check if "glider" demo flag is specified
     if args.glider:
-        grid = np.zeros(n * n).reshape(n, n)
+        grid = np.zeros(size * size).reshape(size, size)
         add_glider(1, 1, grid)
     elif args.gosper:
-        grid = np.zeros(n * n).reshape(n, n)
+        grid = np.zeros(size * size).reshape(size, size)
         add_gosper_glider_gun(10, 10, grid)
     else:
         # populate grid with random on/off - more off than on
-        grid = random_grid(n)
+        grid = random_grid(size)
 
-    # set up animation
-    fig, ax = plt.subplots()
-    img = ax.imshow(grid, interpolation="nearest")
-    ani = animation.FuncAnimation(
-        fig,
-        update_vectorized,
-        fargs=(
-            img,
-            grid,
-            n,
-        ),
-        frames=10,
-        interval=update_interval,
-        save_count=50,
-    )
+    # update without animation
+    for k in range(iterations):
+        grid = update_vectorized(grid, size)
 
-    # # of frames?
-    # set output file
-    if args.movfile:
-        ani.save(args.movfile, fps=30, extra_args=["-vcodec", "libx264"])
-
-    plt.show()
-
+    exit()
 
 # call main
 if __name__ == "__main__":
