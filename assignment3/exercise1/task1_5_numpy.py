@@ -2,11 +2,11 @@ from timeit import default_timer as timer
 from functools import wraps
 import numpy as np
 import matplotlib.pyplot as plt
-from gauss_seidel import gauss_seidel # Our cythonized function
+from gauss_seidel_numpy import gauss_seidel # Our cythonized function
 
 def main():
     # instantiate 
-    N = [4, 8, 16, 32, 64] # grid sizes
+    N = [16, 32, 64, 128, 256] # grid sizes
     rng = np.random.default_rng()
     
     gs_iterations = 1000
@@ -14,7 +14,7 @@ def main():
     total_time = []
 
     for n in N:
-        x = rng.random((n, n)).tolist()
+        x = rng.random((n, n), dtype=np.float32)
 
         # set grid values at boundaries to zero
         for j in range(n):

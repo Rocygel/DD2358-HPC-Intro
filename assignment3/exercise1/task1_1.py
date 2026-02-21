@@ -23,7 +23,7 @@ def main():
     total_time = []
 
     for n in N:
-        x = rng.random((n, n))
+        x = rng.random((n, n)).tolist()
 
         # set grid values at boundaries to zero
         for j in range(n):

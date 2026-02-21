@@ -1,20 +1,21 @@
+import torch
+import pytorch_ocl
+import matplotlib.pyplot as plt
+from torch import rand
 from timeit import default_timer as timer
 from functools import wraps
-import numpy as np
-import matplotlib.pyplot as plt
-from gauss_seidel import gauss_seidel # Our cythonized function
+from gauss_seidel_parallel import gauss_seidel 
 
 def main():
     # instantiate 
-    N = [4, 8, 16, 32, 64] # grid sizes
-    rng = np.random.default_rng()
+    N = [16, 32, 64, 128, 256] # grid sizes
     
     gs_iterations = 1000
     run_iterations = 10
     total_time = []
 
     for n in N:
-        x = rng.random((n, n)).tolist()
+        x = rand((n, n), dtype=torch.float32).to("ocl:0")
 
         # set grid values at boundaries to zero
         for j in range(n):
