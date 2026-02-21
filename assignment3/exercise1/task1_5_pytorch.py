@@ -1,5 +1,4 @@
 import torch
-import pytorch_ocl
 import matplotlib.pyplot as plt
 from torch import rand
 from timeit import default_timer as timer
@@ -15,7 +14,7 @@ def main():
     total_time = []
 
     for n in N:
-        x = rand((n, n), dtype=torch.float32).to("ocl:0")
+        x = rand((n, n), dtype=torch.float32).cuda()
 
         # set grid values at boundaries to zero
         for j in range(n):

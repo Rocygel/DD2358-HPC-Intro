@@ -2,7 +2,6 @@ from distutils.core import setup
 from Cython.Build import cythonize
 import numpy
 import torch
-import pytorch_ocl
 
 setup(
     ext_modules=cythonize(

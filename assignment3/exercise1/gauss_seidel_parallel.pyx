@@ -1,6 +1,5 @@
 ## gauss_seidel_parallel.pyx
 import torch
-import pytorch_ocl
 from torch import roll
 
 def gauss_seidel(f):
