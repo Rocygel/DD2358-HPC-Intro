@@ -1,3 +1,6 @@
+# Project-specific (we don't need to track the auto-generated html files from cython)
+*.html
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
