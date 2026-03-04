@@ -1,8 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import random
+import dask
 from dask import delayed
-#import dask
+from dask.distributed import Client
 from timeit import default_timer as timer
 
 # Constants
@@ -79,29 +80,36 @@ def simulate_wildfire():
     
     return fire_spread
 
-# Run simulation
-fire_spread_over_time = []
-runs = 20
+if __name__ == "__main__":
+    client = Client()
+    print("Dask dashboard running at:", client.dashboard_link)
 
-t0 = timer()
+    # Run simulation
+    fire_spread_over_time = []
+    runs = 4
 
-results = [simulate_wildfire() for _ in range(runs)]
+    t0 = timer()
 
-final_results = dask.compute(*results)
+    results = [simulate_wildfire() for _ in range(runs)]
 
-#print(results)
+    dask.visualize(*results)
 
-t1 = timer()
-time = (t1 - t0) / runs
-#print(time)
+    final_results = dask.compute(*results)
+    #print(final_results)
 
-dask.visualize(*results)
+    fire_spread_over_time = [sum(spread) for spread in final_results]
+    fire_spread_over_time = [spread // runs for spread in fire_spread_over_time]
+    
+    t1 = timer()
+    time = (t1 - t0) / runs
+    print(time)
 
-# Plot results
-#plt.figure(figsize=(8, 5))
-#plt.plot(range(len(fire_spread_over_time)), fire_spread_over_time, label="Burning Trees")
-#plt.xlabel("Days")
-#plt.ylabel("Number of Burning Trees")
-#plt.title("Wildfire Spread Over Time")
-#plt.legend()
-#plt.show()
+
+    # Plot results
+    plt.figure(figsize=(8, 5))
+    plt.plot(range(len(fire_spread_over_time)), fire_spread_over_time, label="Burning Trees")
+    plt.xlabel("Days")
+    plt.ylabel("Number of Burning Trees")
+    plt.title("Wildfire Spread Over Time")
+    plt.legend()
+    plt.show()
