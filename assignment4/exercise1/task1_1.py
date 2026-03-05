@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import random
 from timeit import default_timer as timer
+from operator import add
 import multiprocessing
 
 # Constants
@@ -39,12 +40,12 @@ def get_neighbors(x, y):
 
 def simulate_wildfire(n):
     """Simulates wildfire spread over time for n iterations"""
-    aggregate_fire = []
+    aggregate_fire = [0] * DAYS
     
     for i in range(n):
         forest, burn_time = initialize_forest()
     
-        fire_spread = []  # Track number of burning trees each day
+        #fire_spread = []  # Track number of burning trees each day
     
         for day in range(DAYS):
             new_forest = forest.copy()
@@ -65,14 +66,16 @@ def simulate_wildfire(n):
                                 burn_time[nx, ny] = 1
             
             forest = new_forest.copy()
-            fire_spread.append(np.sum(forest == BURNING))
+            #fire_spread.append(np.sum(forest == BURNING))
+            aggregate_fire[day] += np.sum(forest == BURNING)
             
             if np.sum(forest == BURNING) == 0:  # Stop if no more fire
                 break
         
         # for aggregating multiple runs
-        aggregate_fire = aggregate_fire + fire_spread
-        fire_spread = []
+        #aggregate_fire = aggregate_fire + fire_spread
+        #aggregate_fire = list(map(add, aggregate_fire, fire_spread))
+        #fire_spread = []
             
             # Plot grid every 5 days
             #if day % 5 == 0 or day == DAYS - 1:
@@ -96,8 +99,9 @@ if __name__ == "__main__":
     with multiprocessing.Pool(processes = num_workers) as pool:
         fire_spread_over_time = pool.map(simulate_wildfire, [5, 5, 5, 5])
 
-    fire_spread_over_time = [sum(spread) for spread in zip(*fire_spread_over_time)]
-    fire_spread_over_time = [spread // n for spread in fire_spread_over_time] 
+    #fire_spread_over_time = [sum(spread) for spread in zip(*fire_spread_over_time)]
+    fire_spread_over_time = list(map(sum, zip(*fire_spread_over_time)))
+    fire_spread_over_time = [spread // num_workers for spread in fire_spread_over_time] 
 
     t1 = timer()
     time = (t1 - t0) / 10
