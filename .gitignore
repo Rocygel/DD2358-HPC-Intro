@@ -1,6 +1,6 @@
 # Project-specific (we don't need to track the auto-generated html files from cython), vtk for visualization
 *.html
-.vtk
+*.vtk
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
