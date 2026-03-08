@@ -1,7 +1,7 @@
 ## taskB_1.py
 import numpy as np
 import matplotlib.pyplot as plt
-from mandelbrot import mandelbrot_set
+from mandelbrot_vectorized import mandelbrot_set
 
 def main():
     # Parameters
