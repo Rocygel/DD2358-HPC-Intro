@@ -2,20 +2,6 @@
 import numpy as np
 cimport numpy as np
 
-# def mandelbrot(double complex c, unsigned int max_iter=100):
-#     """
-#     Computes the number of iterations before divergence.
-#     Taken from the course Canvas page.
-#     """
-#     cdef unsigned int n
-#     cdef double complex z
-#     z = 0
-#     for n in range(max_iter):
-#         if abs(z) > 2:
-#             return n
-#         z = z*z + c
-#     return max_iter
-
 def mandelbrot_set(unsigned int width, unsigned int height, int x_min, int x_max, int y_min, int y_max, unsigned int max_iter=100):
     """
     Computes a heat map of the Mandelbrot set.

@@ -1,7 +1,7 @@
-## taskB_1.py
+## taskB_2.py
 import numpy as np
 import matplotlib.pyplot as plt
-from mandelbrot_vectorized import mandelbrot_set
+from mandelbrot import mandelbrot_set # choose mandelbrot module to import from
 
 def main():
     # Parameters
