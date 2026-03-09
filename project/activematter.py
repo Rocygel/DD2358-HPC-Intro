@@ -1,4 +1,4 @@
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 import numpy as np
 
 """
@@ -9,7 +9,7 @@ Simulate Viscek model for flocking birds
 
 """
 
-
+@profile
 def main():
     """Finite Volume simulation"""
 
@@ -21,7 +21,7 @@ def main():
     dt = 0.2  # time step
     Nt = 200  # number of time steps
     N = 500  # number of birds
-    plotRealTime = True
+#   plotRealTime = True
 
     # Initialize
     np.random.seed(17)  # set the random number generator seed
@@ -36,8 +36,8 @@ def main():
     vy = v0 * np.sin(theta)
 
     # Prep figure
-    fig = plt.figure(figsize=(4, 4), dpi=80)
-    ax = plt.gca()
+#   fig = plt.figure(figsize=(4, 4), dpi=80)
+#   ax = plt.gca()
 
     # Simulation Main Loop
     for i in range(Nt):
@@ -50,6 +50,7 @@ def main():
         y = y % L
 
         # find mean angle of neighbors within R
+#       TODO: Investigate vectorization
         mean_theta = theta
         for b in range(N):
             neighbors = (x - x[b]) ** 2 + (y - y[b]) ** 2 < R**2
@@ -65,18 +66,18 @@ def main():
         vy = v0 * np.sin(theta)
 
         # plot in real time
-        if plotRealTime or (i == Nt - 1):
-            plt.cla()
-            plt.quiver(x, y, vx, vy)
-            ax.set(xlim=(0, L), ylim=(0, L))
-            ax.set_aspect("equal")
-            ax.get_xaxis().set_visible(False)
-            ax.get_yaxis().set_visible(False)
-            plt.pause(0.001)
+#       if plotRealTime or (i == Nt - 1):
+#           plt.cla()
+#           plt.quiver(x, y, vx, vy)
+#           ax.set(xlim=(0, L), ylim=(0, L))
+#           ax.set_aspect("equal")
+#           ax.get_xaxis().set_visible(False)
+#           ax.get_yaxis().set_visible(False)
+#           plt.pause(0.001)
 
     # Save figure
-    plt.savefig("activematter.png", dpi=240)
-    plt.show()
+#   plt.savefig("activematter.png", dpi=240)
+#   plt.show()
 
     return 0
 
